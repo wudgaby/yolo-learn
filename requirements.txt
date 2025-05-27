@@ -5,3 +5,6 @@ opencv-python~=4.11.0.86
 onnx==1.17.0
 onnxruntime==1.22.0
 onnxruntime-tools==1.7.0
+lap==0.5.12
+pytubefix==9.0.1
+shapely==2.1.1

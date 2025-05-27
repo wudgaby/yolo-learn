@@ -1,8 +1,10 @@
 import torch
-from ultralytics import YOLO
+from ultralytics import YOLO, settings
 from ultralytics.data import YOLODataset
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+settings['runs_dir'] = 'my_runs/'
+
 # 训练自己的目标检测模型
 def train():
     # 加载你的自定义数据集（自动解析 data.yaml）
@@ -32,12 +34,17 @@ def train():
     # https://chatgpt.com/share/682bf302-de60-800b-ad38-805750f6cd8b
     # workers: 数据加载时的工作线程数, windows系统下需设置为0，否则会报错
     # name 用于指定本次验证（val）或训练（train）任务的输出文件夹名称
+    # save_period=5 每5轮保存一次last.pt
+    # resume 断点恢复
 
     #print(torch.cuda.is_available())  # True 表示你有 CUDA 可用
     #print(torch.cuda.device_count())  # 有几张 CUDA GPU
     #print(torch.cuda.get_device_name(0))  # 第 0 张 GPU 名称
 
-    results = model.train(data='dataset/data.yml', name="train_v1", imgsz=(640, 640), workers=0, batch=32, epochs=100, device=device)
+    results = model.train(data='dataset/data.yml', name="train_v",
+                          imgsz=(640, 640), workers=0, batch=32, epochs=100,
+                          save_period=5, resume=True,
+                          device=device)
 
 
 def train_hand_keypoints():
@@ -52,7 +59,16 @@ def train_hand_keypoints():
     model = YOLO('model/yolo11n-pose.pt')  # load a pretrained model (recommended for training)
 
     # 会自动下载数据集
-    results = model.train(data='datasets/hand-keypoints/data.yml', name="train_v1", imgsz=(640, 640), workers=0, batch=32, epochs=100, device=device)
+    results = model.train(data='datasets/hand-keypoints/data.yml',
+                          name="train_v", imgsz=640,
+                          workers=0, batch=32, epochs=100,
+                          save_period=5, resume=True,
+                          device=device)
+
+    # # 加载上次保存的模型权重
+    # model = YOLO('runs/train/train_v/weights/last.pt')
+    # # 继续训练
+    # model.train(resume=True)
 
 
 if __name__ == '__main__':

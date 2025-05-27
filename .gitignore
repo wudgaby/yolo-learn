@@ -80,3 +80,4 @@ fabric.properties
 datasets/hand-keypoints/
 media/
 runs/
+venv/
