@@ -42,7 +42,7 @@ def train():
     #print(torch.cuda.get_device_name(0))  # 第 0 张 GPU 名称
 
     results = model.train(data='dataset/data.yml', name="train_v",
-                          imgsz=(640, 640), workers=0, batch=32, epochs=100,
+                          imgsz=(640, 640), workers=8, batch=32, epochs=100,
                           save_period=5, resume=True,
                           device=device)
 
@@ -61,7 +61,7 @@ def train_hand_keypoints():
     # 会自动下载数据集
     results = model.train(data='datasets/hand-keypoints/data.yml',
                           name="train_v", imgsz=640,
-                          workers=0, batch=32, epochs=100,
+                          workers=8, batch=32, epochs=100,
                           save_period=5, resume=True,
                           device=device)
 
